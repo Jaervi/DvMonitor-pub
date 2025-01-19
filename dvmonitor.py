@@ -17,6 +17,12 @@ import eventlogger as el
 
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 
+# NOTE:
+# This project is a tool made at a previous workplace of mine primarily for personal use. It does some helper tasks related to my field of work there
+# Therefore this version of the project has all company specific data changed to generic names but no functionality has been changed. 
+# So it doesn't quite work out of the box but no major changes would be required to do so, logic is virtually unchanged
+#
+
 def check_devices(args):
     start_time = datetime.datetime.now()
     print(f'\n{start_time.strftime(DATE_FORMAT)}\nChecking devices:')
@@ -26,12 +32,15 @@ def check_devices(args):
 
     # Pinging the ping list and making a GET-request inside a future to improve execution speed.
     with concurrent.futures.ThreadPoolExecutor() as exec:
-        ping_future = exec.submit(syncping.ping_list,netdata.pinglist)
-        request_future = exec.submit(requests.get,netdata.readaddress, timeout=15)
+        try: 
+            ping_future = exec.submit(syncping.ping_list,netdata.pinglist)
+            request_future = exec.submit(requests.get,netdata.readaddress, timeout=15)
 
-        ping_result = ping_future.result()
-        response = request_future.result()
-
+            ping_result = ping_future.result()
+            response = request_future.result()
+        except Exception as e:
+            el.log_event(f'Error in connecting to endpoints: {e}')
+            print(f'Error in connecting to endpoints: {e}')
 
     syncping.informative_print(ping_result)
     if not response:
@@ -51,7 +60,7 @@ def check_devices(args):
             if not args.screen_restart:
                 print('Did not restart screen because option "--screen_restart" is not enabled')
             else:
-                UFRFix.restartPhoneScreen(netdata.sshost_phone,netdata.sshuser,netdata.sshpwd)
+                UFRFix.restartPhoneScreen(netdata.sshost_dev5,netdata.sshuser,netdata.sshpwd)
         
         if not args.device_reboot:
                 print('Did not reboot any devices because option "--device_reboot" is not enabled')
