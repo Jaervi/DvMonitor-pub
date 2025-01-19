@@ -30,25 +30,25 @@ The program was made and tested with Python 3.12.4. Support for earlier versions
 - Download the source code
 - In the download folder, create a virtual environment:
   ```
-  $ python -m venv myenv
+  $ python -m venv .venv
   ```
 - Activate the environment
   
     On Windows
     
     ```
-    $ myenv\Scripts\activate
+    $ .venv\Scripts\activate
     ```
     On Unix or MacOS
     
     ```
-    $ source myenv/bin/activate
+    $ source .venv/bin/activate
     ```
 
 - Install the program dependencies
 
   ```
-  pip install -r requirements.txt
+  $ pip install -r requirements.txt
   ```
 
 - Setup the `netdata.py` file, below are the contents of `netdata_example.py`. To have the program work "out-of-the-box", the following fields must be filled inside `netdata.py`.
